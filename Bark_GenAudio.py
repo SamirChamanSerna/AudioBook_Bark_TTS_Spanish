@@ -2,7 +2,9 @@ from transformers import BarkModel, AutoProcessor
 import torch
 import scipy
 import optimum
-import accelerate
+
+# import accelerate
+
 
 # Set default tensor type to CUDA
 torch.set_default_tensor_type(torch.cuda.FloatTensor)
@@ -25,6 +27,7 @@ model = model.to(device)
 model = model.to_bettertransformer()
 
 # enable CPU offload
+# Necesita accelerate
 # 80% reduction in memory footprint
 # model.enable_cpu_offload()
 
@@ -54,4 +57,4 @@ audio_array = audio_array.cpu().numpy().squeeze()
 
 # save them as a .wav file
 sample_rate = model.generation_config.sample_rate
-scipy.io.wavfile.write("bark_out_Test16.wav", rate=sample_rate, data=audio_array)
+scipy.io.wavfile.write("Test1.wav", rate=sample_rate, data=audio_array)
