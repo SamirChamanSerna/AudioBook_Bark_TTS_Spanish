@@ -16,10 +16,11 @@ model = model.to(device)
 
 # load in fp16
 # No parece que funciona pero el archivo de audio no contiene nada
-# model = BarkModel.from_pretrained("suno/bark", torch_dtype=torch.float16).to(device)
+# model = BarkModel.from_pretrained("suno/bark-small", torch_dtype=torch.float16).to(device)
 
 # convert to bettertransformer
-model = model.to_bettertransformer()
+# Al parecer esto hace que el modelo completo alucine más.
+# model = model.to_bettertransformer()
 
 # enable CPU offload
 model.enable_cpu_offload()
@@ -30,7 +31,7 @@ processor = AutoProcessor.from_pretrained("suno/bark")
 voice_preset = "v2/es_speaker_0"
 
 inputs = processor(
-    "Hola. Esta es una prueba con unas cuantas optimizaciones",
+    "Hola, esto es una prueba con el modelo grande.",
     voice_preset=voice_preset,
 )
 
@@ -39,4 +40,4 @@ audio_array = audio_array.cpu().numpy().squeeze()
 
 # save them as a .wav file
 sample_rate = model.generation_config.sample_rate
-scipy.io.wavfile.write("bark_out3.wav", rate=sample_rate, data=audio_array)
+scipy.io.wavfile.write("bark_out_Test4.wav", rate=sample_rate, data=audio_array)
