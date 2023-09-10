@@ -17,7 +17,7 @@ model = BarkModel.from_pretrained("suno/bark")
 model = model.to(device)
 
 # load in fp16
-# No parece que funciona pero el archivo de audio no contiene nada
+# Parece que funciona pero el archivo de audio no contiene nada
 # Necesita optimum
 # model = BarkModel.from_pretrained("suno/bark-small", torch_dtype=torch.float16).to(device)
 
@@ -37,7 +37,7 @@ processor = AutoProcessor.from_pretrained("suno/bark")
 voice_preset = "v2/es_speaker_4"
 
 inputs = processor(
-    "Hola, esto es algo más avanzado.",
+    "Hola. ",
     voice_preset=voice_preset,
 )
 # Basic
@@ -50,11 +50,11 @@ audio_array = model.generate(
     temperature=1,
     semantic_temperature=0.85,
     do_sample=True,
-    early_stopping=False
+    early_stopping=False,
 )
 
 audio_array = audio_array.cpu().numpy().squeeze()
 
 # save them as a .wav file
 sample_rate = model.generation_config.sample_rate
-scipy.io.wavfile.write("Test1.wav", rate=sample_rate, data=audio_array)
+scipy.io.wavfile.write("Test2.wav", rate=sample_rate, data=audio_array)

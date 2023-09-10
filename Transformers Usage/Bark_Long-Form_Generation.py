@@ -44,27 +44,22 @@ voice_preset = "v2/en_speaker_6"
 # quarter second of silence
 silence = np.zeros(int(0.25 * sample_rate))
 
-# GEN_TEMP = 0.6
-
-# pieces = []
-# for sentence in sentences:
-#    audio_array = model.generate(
-#        sentence,
-#        history_prompt=voice_preset,
-#        # num_beams=4,
-#        temperature=1,
-#        semantic_temperature=0.85,
-#        do_sample=True,
-#        early_stopping=False,
-#    )
-#    pieces += [audio_array, silence.copy()]
 
 pieces = []
 for sentence in sentences:
-    audio_array = model.generate(sentence, history_prompt=voice_preset)
+    inputs = processor(sentence, voice_preset=voice_preset)
+    audio_array = model.generate(
+        **inputs,
+        temperature=1,
+        semantic_temperature=0.85,
+        do_sample=True,
+        early_stopping=False,
+    )
     pieces += [audio_array, silence.copy()]
 
-audio_array = audio_array.cpu().numpy().squeeze()
+
+audio_array = audio_array.detach().cpu().numpy().squeeze()
+
 
 # save them as a .wav file
 scipy.io.wavfile.write(
